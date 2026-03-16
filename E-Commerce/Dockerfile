@@ -4,9 +4,8 @@ EXPOSE 8080
 
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
-COPY ["E-Commerce.csproj", "."]
-RUN dotnet restore "./E-Commerce.csproj"
 COPY . .
+RUN dotnet restore "E-Commerce.csproj"
 RUN dotnet build "E-Commerce.csproj" -c Release -o /app/build
 
 FROM build AS publish
