@@ -1,0 +1,45 @@
+@model List<E_Commerce.Models.Product>
+@{
+    ViewData["Title"] = "Products";
+}
+
+<section class="products-section">
+    <div class="container">
+        <h2 class="section-title">Products</h2>
+
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <h3>No products available</h3>
+                <p>Please check back later.</p>
+            </div>
+        }
+        else
+        {
+            <div class="products-grid">
+                @foreach (var product in Model)
+                {
+                    <div class="product-card">
+                        <div class="product-image-wrap">
+                            <img src="@(string.IsNullOrEmpty(product.ImagePath) ? "https://via.placeholder.com/400x250/1a1a2e/ffffff?text=Product" : product.ImagePath)" alt="@product.Title" class="product-img" />
+                            <div class="product-overlay">
+                                <a href="@product.ProductUrl" target="_blank" rel="noopener noreferrer" class="buy-now-btn">
+                                    <i class="fas fa-bolt" aria-hidden="true"></i> Buy Now
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">@product.Title</h3>
+                            <p class="product-desc">@product.Description</p>
+                            <div class="product-footer">
+                                <span class="product-store"><i class="fas fa-external-link-alt" aria-hidden="true"></i> View on Store</span>
+                                <span class="product-date">@product.CreatedAt.ToString("MMM dd")</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

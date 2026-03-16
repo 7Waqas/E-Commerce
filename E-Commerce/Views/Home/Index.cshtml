@@ -1,0 +1,99 @@
+﻿@model List<E_Commerce.Models.Product>
+@{
+    ViewData["Title"] = "Browse Products";
+    var categories = ViewBag.Categories as List<E_Commerce.Models.Category>;
+    var selectedCat = ViewBag.SelectedCategory as int?;
+    var counts = ViewBag.ProductCounts as Dictionary<int, int> ?? new Dictionary<int, int>();
+}
+
+<section class="hero-section">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="container text-center hero-content">
+        <span class="hero-badge">✦ Curated Collection</span>
+        <h1 class="hero-title">Discover Products<br /><span class="hero-accent">Worth Buying</span></h1>
+        <p class="hero-sub">Hand-picked items. Click to buy directly from trusted stores.</p>
+    </div>
+</section>
+
+<section class="filter-section">
+    <div class="container">
+        <div class="filter-bar">
+            <a href="/" class="filter-btn @(selectedCat == null ? "active" : "")">
+                <span class="filter-label">All</span>
+                <span class="filter-count">@Model.Count</span>
+            </a>
+            @if (categories != null)
+            {
+                @foreach (var cat in categories)
+                {
+                    var count = counts.ContainsKey(cat.Id) ? counts[cat.Id] : 0;
+                    <a href="/?categoryId=@cat.Id"
+                           class="filter-btn @(selectedCat == cat.Id ? "active" : "")">
+                        <span class="filter-label">@cat.Name</span>
+                        <span class="filter-count">@count</span>
+                    </a>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+<section class="products-section">
+    <div class="container">
+
+        @if (selectedCat.HasValue && categories != null)
+        {
+            var activeCat = categories.FirstOrDefault(c => c.Id == selectedCat);
+            if (activeCat != null)
+            {
+                <div class="section-heading">
+                    <h2>@activeCat.Name</h2>
+                    <span class="section-count">@Model.Count product@(Model.Count != 1 ? "s" : "")</span>
+                </div>
+            }
+        }
+
+        @if (!Model.Any())
+        {
+            <div class="empty-state">
+                <div class="empty-icon">📦</div>
+                <h3>No Products Here Yet</h3>
+                <p>Check back soon or browse another category.</p>
+                <a href="/" class="btn-back-all">View All Products</a>
+            </div>
+        }
+        else
+        {
+            <div class="products-grid">
+                @foreach (var product in Model)
+                {
+                    <div class="product-card">
+                        <div class="product-image-wrap">
+                            <img src="@(string.IsNullOrEmpty(product.ImagePath) ? "https://placehold.co/400x250/e8e2d6/6b6080?text=No+Image" : product.ImagePath)"
+                                 alt="@product.Title" class="product-img" loading="lazy" />
+                            @if (product.Category != null)
+                            {
+                                <span class="product-cat-badge">@product.Category.Name</span>
+                            }
+                            <div class="product-overlay">
+                                <a href="@product.ProductUrl" target="_blank" rel="noopener noreferrer" class="buy-now-btn">
+                                    <i class="fas fa-bolt" aria-hidden="true"></i> Buy Now
+                                </a>
+                            </div>
+                        </div>
+                        <div class="product-info">
+                            <h3 class="product-title">@product.Title</h3>
+                            <p class="product-desc">@product.Description</p>
+                            <div class="product-footer">
+                                <span class="product-store">
+                                    <i class="fas fa-external-link-alt" aria-hidden="true"></i> View on Store
+                                </span>
+                                <span class="product-date">@product.CreatedAt.ToString("MMM dd")</span>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+    </div>
+</section>

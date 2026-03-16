@@ -1,0 +1,94 @@
+﻿@model E_Commerce.Models.Product
+@{
+    ViewData["Title"] = "Edit Product";
+}
+
+<div class="form-page">
+    <div class="container">
+        <div class="form-box">
+            <div class="form-box-header">
+                <a href="/Product/Dashboard" class="back-btn"><i class="fas fa-arrow-left"></i></a>
+                <h2>Edit Product</h2>
+            </div>
+
+            <form asp-action="Edit" method="post" enctype="multipart/form-data" class="product-form">
+                @Html.AntiForgeryToken()
+                <input asp-for="Id" type="hidden" />
+                <input asp-for="CreatedAt" type="hidden" />
+                <input asp-for="ImagePath" type="hidden" />
+
+                <div class="form-group-custom">
+                    <label><i class="fas fa-tag"></i> Product Title</label>
+                    <input asp-for="Title" class="input-field" />
+                    <span asp-validation-for="Title" class="field-error"></span>
+                </div>
+
+                <div class="form-group-custom">
+                    <label><i class="fas fa-folder"></i> Category</label>
+                    <select asp-for="CategoryId" asp-items="ViewBag.Categories" class="input-field select-field">
+                        <option value="">-- Select a Category --</option>
+                    </select>
+                    <span asp-validation-for="CategoryId" class="field-error"></span>
+                </div>
+
+                <div class="form-group-custom">
+                    <label><i class="fas fa-align-left"></i> Description</label>
+                    <textarea asp-for="Description" class="input-field textarea-field" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="field-error"></span>
+                </div>
+
+                <div class="form-group-custom">
+                    <label><i class="fas fa-shopping-cart"></i> Buy Now URL</label>
+                    <input asp-for="ProductUrl" class="input-field" />
+                    <span asp-validation-for="ProductUrl" class="field-error"></span>
+                </div>
+
+                <div class="form-group-custom">
+                    <label><i class="fas fa-image"></i> Product Image</label>
+                    @if (!string.IsNullOrEmpty(Model.ImagePath))
+                    {
+                        <div class="current-image-wrap">
+                            <img src="@Model.ImagePath" alt="Current Image" class="current-image-thumb" />
+                            <span class="current-image-label">Current image — upload a new one to replace it</span>
+                        </div>
+                    }
+                    <div class="upload-zone" id="uploadZone">
+                        <input asp-for="ImageFile" type="file" accept="image/*"
+                               class="upload-input" id="imageInput" onchange="previewImage(this)" />
+                        <div class="upload-placeholder" id="uploadPlaceholder">
+                            <div class="upload-icon">📷</div>
+                            <div class="upload-text">Upload new image <span class="optional">(optional)</span></div>
+                            <div class="upload-hint">Replaces the current image</div>
+                        </div>
+                        <img id="imagePreview" class="upload-preview" src="" alt="Preview" style="display:none;" />
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <a href="/Product/Dashboard" class="btn-cancel">Cancel</a>
+                    <button type="submit" class="btn-save">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function previewImage(input) {
+            const placeholder = document.getElementById('uploadPlaceholder');
+            const preview = document.getElementById('imagePreview');
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none';
+                };
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}
