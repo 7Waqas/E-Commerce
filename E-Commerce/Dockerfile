@@ -1,0 +1,18 @@
+﻿FROM mcr.microsoft.com/dotnet/aspnet:10.0.5 AS base
+WORKDIR /app
+EXPOSE 8080
+
+FROM mcr.microsoft.com/dotnet/sdk:10.0.5 AS build
+WORKDIR /src
+COPY ["E-Commerce.csproj", "."]
+RUN dotnet restore "./E-Commerce.csproj"
+COPY . .
+RUN dotnet build "E-Commerce.csproj" -c Release -o /app/build
+
+FROM build AS publish
+RUN dotnet publish "E-Commerce.csproj" -c Release -o /app/publish
+
+FROM base AS final
+WORKDIR /app
+COPY --from=publish /app/publish .
+ENTRYPOINT ["dotnet", "E-Commerce.dll"]

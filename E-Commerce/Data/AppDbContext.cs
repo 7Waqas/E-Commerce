@@ -16,16 +16,14 @@ namespace E_Commerce.Data
         {
             base.OnModelCreating(modelBuilder);
 
-            // Seed default categories
             modelBuilder.Entity<Category>().HasData(
-                new Category { Id = 1, Name = "Electronics", Description = "Gadgets and devices", CreatedAt = new DateTime(2025, 1, 1) },
-                new Category { Id = 2, Name = "Fashion", Description = "Clothing and accessories", CreatedAt = new DateTime(2025, 1, 1) },
-                new Category { Id = 3, Name = "Home & Living", Description = "Furniture and home decor", CreatedAt = new DateTime(2025, 1, 1) },
-                new Category { Id = 4, Name = "Sports", Description = "Sports and outdoor gear", CreatedAt = new DateTime(2025, 1, 1) },
-                new Category { Id = 5, Name = "Books", Description = "Books and stationery", CreatedAt = new DateTime(2025, 1, 1) }
+                new Category { Id = 1, Name = "Electronics", Description = "Gadgets and devices", CreatedAt = DateTime.SpecifyKind(new DateTime(2025, 1, 1), DateTimeKind.Utc) },
+                new Category { Id = 2, Name = "Fashion", Description = "Clothing and accessories", CreatedAt = DateTime.SpecifyKind(new DateTime(2025, 1, 1), DateTimeKind.Utc) },
+                new Category { Id = 3, Name = "Home & Living", Description = "Furniture and home decor", CreatedAt = DateTime.SpecifyKind(new DateTime(2025, 1, 1), DateTimeKind.Utc) },
+                new Category { Id = 4, Name = "Sports", Description = "Sports and outdoor gear", CreatedAt = DateTime.SpecifyKind(new DateTime(2025, 1, 1), DateTimeKind.Utc) },
+                new Category { Id = 5, Name = "Books", Description = "Books and stationery", CreatedAt = DateTime.SpecifyKind(new DateTime(2025, 1, 1), DateTimeKind.Utc) }
             );
 
-            // Seed one sample product
             modelBuilder.Entity<Product>().HasData(
                 new Product
                 {
@@ -35,7 +33,7 @@ namespace E_Commerce.Data
                     ProductUrl = "https://www.amazon.com",
                     ImagePath = null,
                     CategoryId = 1,
-                    CreatedAt = new DateTime(2025, 1, 1)
+                    CreatedAt = DateTime.SpecifyKind(new DateTime(2025, 1, 1), DateTimeKind.Utc)
                 }
             );
         }
